@@ -6,8 +6,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import numpy as np
 
-#Add comments
-
+#Initializing data needed for strategy.
 yf.pdr_override()
 stock="TSLA"
 start=dt.datetime(2021,1,1)
@@ -15,14 +14,13 @@ end=dt.datetime.now()
 
 df=pdr.get_data_yahoo(stock,start,end)
 
-
 df['EMA_12']=df.iloc[:,4].ewm(span=12, adjust=False).mean()
 df['EMA_26']=df.iloc[:,4].ewm(span=26, adjust=False).mean()
 df['MACD']=df.iloc[:,6]-df.iloc[:,7]
 df['SIGNAL']=df.iloc[:,8].ewm(span=9, adjust=False).mean()
 df['DIFFSM']=df.iloc[:,9]-df.iloc[:,8]
 
-
+#Setting up variables to tract the progress of trading strategy and anything else needed for the strategy.
 holding=False
 loc=0
 res=[]
@@ -37,6 +35,7 @@ SellPrice=[]
 Days=[]
 
 #print(df.tail())
+#Running the strategy through the dataset.
 for i in df.index:
     Days.append(i)
     close = df["Adj Close"][i]
