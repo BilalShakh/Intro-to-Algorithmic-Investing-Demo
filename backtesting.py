@@ -18,7 +18,7 @@ df['EMA_12']=df.iloc[:,4].ewm(span=12, adjust=False).mean()
 df['EMA_26']=df.iloc[:,4].ewm(span=26, adjust=False).mean()
 df['MACD']=df.iloc[:,6]-df.iloc[:,7]
 df['SIGNAL']=df.iloc[:,8].ewm(span=9, adjust=False).mean()
-df['DIFFSM']=df.iloc[:,9]-df.iloc[:,8]
+df['DIFFSM']=df.iloc[:,8]-df.iloc[:,9]
 
 #Setting up variables to tract the progress of trading strategy and anything else needed for the strategy.
 holding=False
@@ -32,13 +32,11 @@ BuyDate=[]
 BuyPrice=[]
 SellDate=[]
 SellPrice=[]
-Days=[]
 
 #print(df.tail())
 #Running the strategy through the dataset.
 for i in df.index:
-    Days.append(i)
-    close = df["Adj Close"][i]
+    close = df["Close"][i]
     currMacd = df["MACD"][i]
     currSignal = df["SIGNAL"][i]
     
@@ -65,8 +63,9 @@ for i in df.index:
     
     loc += 1
     
-df.insert(11,"Date",Days, False)
+df.insert(11,"Date",df.index, False)
 
+#Calculating %profit and other useful stai
 maxReturn = res[0]
 maxDate = str(SellDate[0])
 avgReturn = sum(res)/len(res)
